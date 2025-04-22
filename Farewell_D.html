@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farewell Letter</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f4f0;
+      color: #5c5c5c;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    header {
+      padding: 2rem;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #6a5d4d;
+      align-items: center;
+    }
+
+    nav {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      background-color: #c9b6a7;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #b49f91;
+    }
+
+    .letter-box {
+      background-color: #fffdf9;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+      min-height: 200px;
+      width: 90%;
+      position: relative;
+      display: none; /* Initially hidden */
+    }
+
+    .typing-text {
+      border-right: .1em solid #6a5d4d;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+      font-size: 1.1rem;
+    }
+
+    .decor {
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 80px;
+      height: 80px;
+      background-image: url('https://cdn.pixabay.com/photo/2016/03/31/20/11/flower-1296552_960_720.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      opacity: 0.4;
+    }
+
+    audio {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+    }
+
+    /* Galeri untuk Momen */
+
+    /* Single */
+    .moment-image {
+      max-width: 100%;
+      height: auto;
+      display: none;
+      margin-top: 20px;
+      border-radius: 8px;
+      transition: display 0.3s ease;
+    }
+
+    /* Multiple */
+    .moment-gallery {
+      display: none;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .moment-gallery img {
+      max-width: 250px;
+      height: auto;
+      /* margin-top: 20px; */
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .moment-gallery img:hover {
+      transform: scale(1.05);
+    }
+
+    /* Ruang ekstra untuk konten */
+    .content {
+      padding: 2rem;
+      width: 100%;
+      max-width: 800px;
+    }
+
+  </style>
+</head>
+<body>
+  <header>To, Uda Dicky!</header>
+  <div class="content">
+    <p>Hi, Uda.<br>Aku bikin ini bukan sebagai ucapan perpisahan, tapi ucapan rasa syukurku karena sudah mengenalmu.<br>Tolong dibuka 1-1 dan play lagunya ya.<br></p>
+  </div>
+  <nav>
+    <button onclick="toogleText('awal')">Awal Ketemu</button>
+    <button onclick="toogleText('first')">First Impression Aku</button>
+    <button onclick="toogleText('pesan')">Pesan dari Aku</button>
+    <button onclick="showMoment()">Buka Kenangan Kita</button>
+  </nav>
+
+  <div class="letter-box" id="letter-box">
+    <div class="decor"></div>
+    <div id="typing-text" class="typing-text"></div>
+  </div>
+
+  <!-- Galeri Foto -->
+  <img id="moment-gallery" class="moment-gallery">
+
+  <audio controls autoplay loop>
+    <source src="LongLive.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    const texts = {
+      awal: "Pertama kali kita ketemu, nggak pernah nyangka bakal sedekat ini...",
+      first: "First impression aku? Kamu tuh kalem tapi ternyata asik banget kalau udah ngobrol!",
+      kenangan: "Dari ngobrol iseng di pantry sampai lembur bareng, tiap momen itu jadi kenangan manis buatku.",
+      pesan: "Makasih udah jadi bagian dari hariku di kantor. Semoga sukses terus ya, kita pasti ketemu lagi di lain waktu!"
+    };
+
+    let i = 0;
+    let currentText = '';
+    let isTyping = false;
+
+    function typeWriter(text, elementId) {
+      const element = document.getElementById(elementId);
+      element.textContent = '';
+      i = 0;
+      currentText = text;
+      isTyping = true;
+
+      function type() {
+        if (i < currentText.length) {
+          element.textContent += currentText.charAt(i);
+          i++;
+          setTimeout(type, 40);
+        } else {
+          isTyping = false;
+        }
+      }
+
+      type();
+    }
+
+    function toogleText(key) {
+      const letterBox = document.getElementById('letter-box');
+      const typingTex = document.getElementById('typing-text');
+
+      if (!isTyping) {
+        if (letterBox.style.display === 'none') {
+          letterBox.style.display = 'block'; // Tampilan kotak teks
+          typeWriter(texts[key], 'typing-text'); // Tampilan teks
+        } else {
+          letterBox.style.display = 'none';
+        }
+      }
+    }
+
+    // Fungsi untuk menampilkan gambar momen
+    function showMoment() {
+      const gallery = document.getElementById('moment-gallery');
+      const letterBox = document.getElementById('letter-box');
+      
+      gallery.style.display = gallery.style.display === 'none' || gallery.style.display === '' ? 'flex' : 'none';
+      
+      if (gallery.style.display === 'flex') {
+        const images = [
+          'Munggahan2025.jpeg',
+          'HalbilGenZ.jpeg'
+        ];
+
+        // Menghapus gambar sebelumnya
+        gallery.innerHTML = '';
+
+        images.forEach (src => {
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = "Kenangan Kita";
+          gallery.appendChild(img);
+        });
+
+        //letterBox.style.display = 'none'; //Sembunyikan kotak tulisan
+
+      }
+    }
+  </script>
+</body>
+</html>
